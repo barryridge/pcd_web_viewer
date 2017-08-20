@@ -14,9 +14,12 @@ if (!String.prototype.endsWith) {
 
 function viewer(container, options) {
 
-	var roll = options.roll || 0.0;
-	var pitch = options.pitch || 0.0;
-	var yaw = options.yaw || 0.0;
+	// var roll = options.roll || 0.0;
+	// var pitch = options.pitch || 0.0;
+	// var yaw = options.yaw || 0.0;
+	var roll = options.roll;
+	var pitch = options.pitch;
+	var yaw = options.yaw;
 	var pointSize = options.pointSize || 0.015;
 
 	// Build a color from a scalar value
@@ -41,9 +44,14 @@ function viewer(container, options) {
 	scene = new THREE.Scene();
 	scene.fog = new THREE.FogExp2(0x000000, 0.0009);
 
+  // Set background color
+  scene.background = new THREE.Color( 0xffffff );
+
 	// Camera
-	var camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 300);
-	camera.position.z = 8;
+	var camera = new THREE.PerspectiveCamera(10, window.innerWidth / window.innerHeight, 0.1, 300);
+  camera.position.x = 0;
+  camera.position.y = 0;
+	camera.position.z = -8;
 	camera.up = new THREE.Vector3(0,0,1);
 
 	// Detect webgl support
@@ -54,8 +62,11 @@ function viewer(container, options) {
 	}
 
 	// The renderer
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({ alpha: true });
 	renderer.setSize(window.innerWidth,window.innerHeight -4);
+
+  // Set background color
+  renderer.setClearColor( 0xffffff, 1);
 
 	// Render the scene
 	function render() {

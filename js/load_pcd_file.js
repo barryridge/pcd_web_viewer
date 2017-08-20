@@ -108,9 +108,9 @@ function loadPCDFile(uri, transform, vertices, colors, progress, success)
 										// Special insane ROS pcd format
 										field.read = function(view, off) {
 											return new THREE.Color(
-												view.getUint8(off+0) / 255.0,
+												view.getUint8(off+2) / 255.0,
 												view.getUint8(off+1) / 255.0,
-												view.getUint8(off+2) / 255.0
+												view.getUint8(off+0) / 255.0
 											);
 										};
 									}
