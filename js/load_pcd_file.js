@@ -114,6 +114,17 @@ function loadPCDFile(uri, transform, vertices, colors, progress, success)
 											);
 										};
 									}
+                  else if(field.name == 'rgba')
+									{
+										// Special insane ROS pcd format
+										field.read = function(view, off) {
+											return new THREE.Color(
+												view.getUint8(off+2) / 255.0,
+												view.getUint8(off+1) / 255.0,
+												view.getUint8(off+0) / 255.0
+											);
+										};
+									}
 									else
 										field.read = function(view, off) { return view.getFloat32(off, true); };
 									break;
@@ -148,7 +159,30 @@ function loadPCDFile(uri, transform, vertices, colors, progress, success)
 									field.read = function(view, off) { return view.getUint16(off, true); };
 									break;
 								case 4:
-									field.read = function(view, off) { return view.getUint32(off, true); };
+									if(field.name == 'rgb')
+									{
+										// Special insane ROS pcd format
+										field.read = function(view, off) {
+											return new THREE.Color(
+												view.getUint8(off+2) / 255.0,
+												view.getUint8(off+1) / 255.0,
+												view.getUint8(off+0) / 255.0
+											);
+										};
+									}
+                  else if(field.name == 'rgba')
+									{
+										// Special insane ROS pcd format
+										field.read = function(view, off) {
+											return new THREE.Color(
+												view.getUint8(off+2) / 255.0,
+												view.getUint8(off+1) / 255.0,
+												view.getUint8(off+0) / 255.0
+											);
+										};
+									}
+									else
+									  field.read = function(view, off) { return view.getUint32(off, true); };
 									break;
 								default:
 									throw "Invalid uint size";
@@ -214,6 +248,9 @@ function loadPCDFile(uri, transform, vertices, colors, progress, success)
 					case 'y': vec.y = value; break;
 					case 'z': vec.z = value; break;
 					case 'rgb':
+						colors[numPoints] = value;
+						break;
+					case 'rgba':
 						colors[numPoints] = value;
 						break;
 				}
